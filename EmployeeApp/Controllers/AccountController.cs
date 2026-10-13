@@ -12,12 +12,14 @@ namespace EmployeeApp.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IDepartmentRepository departmentRepository;
+        private readonly ILogger<AccountController> logger;
 
-        public AccountController(UserManager<ApplicationUser> userManager , SignInManager<ApplicationUser> signInManager , IDepartmentRepository departmentRepository)
+        public AccountController(UserManager<ApplicationUser> userManager , SignInManager<ApplicationUser> signInManager , IDepartmentRepository departmentRepository ,ILogger<AccountController> logger)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.departmentRepository = departmentRepository;
+            this.logger = logger;
         }
         [HttpGet]
         [AllowAnonymous]
@@ -87,35 +89,48 @@ namespace EmployeeApp.Controllers
 
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
+                return View(model);
+
+            try
             {
+                var result = await signInManager.PasswordSignInAsync(
+                    model.UserName,
+                    model.Password,
+                    isPersistent: true,
+                    lockoutOnFailure: false
+                );
+
+                if (result.Succeeded)
+                    return RedirectToAction("Index", "Home");
+
+                ModelState.AddModelError(
+                    "",
+                    "UserName Or Password Wrong !"
+                );
+
                 return View(model);
             }
-
-            var result = await signInManager.PasswordSignInAsync(
-                model.UserName,
-                model.Password,
-                isPersistent: true,
-                lockoutOnFailure: false
-            );
-
-            if (result.Succeeded)
+            catch (Exception ex)
             {
-                return RedirectToAction("Index", "Home");
+                _logger.LogError(
+                    ex,
+                    "Error occurred during POST /Account/Login"
+                );
+
+                return StatusCode(
+                    500,
+                    "An internal error occurred. Check the application logs."
+                );
             }
-
-            ModelState.AddModelError(
-                "",
-                "UserName Or Password Wrong !"
-            );
-
-            return View(model);
         }
+
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
