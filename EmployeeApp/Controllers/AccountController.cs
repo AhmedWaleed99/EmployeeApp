@@ -119,7 +119,7 @@ namespace EmployeeApp.Controllers
             }
             catch (Exception ex)
             {
-                _logger.LogError(
+                logger.LogError(
                     ex,
                     "Error occurred during POST /Account/Login"
                 );
