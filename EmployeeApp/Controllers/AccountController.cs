@@ -20,6 +20,7 @@ namespace EmployeeApp.Controllers
             this.departmentRepository = departmentRepository;
         }
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult Register()
         {
             RegisterViewModel model = new RegisterViewModel();
@@ -27,6 +28,7 @@ namespace EmployeeApp.Controllers
             return View(model);
         }
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid == true)
@@ -78,6 +80,7 @@ namespace EmployeeApp.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
+
         public IActionResult Login()
         {
             return View();
@@ -86,6 +89,7 @@ namespace EmployeeApp.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
+
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid == true)
