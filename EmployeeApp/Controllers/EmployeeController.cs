@@ -23,7 +23,7 @@ namespace EmployeeApp.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await userManager.GetUserAsync(User);
-            if (user.DepartmentID == 2)
+            if (user.DepartmentID == 3)
             {
                 return View(employeeRepository.GetAllWithDepartment());
             }
@@ -35,7 +35,7 @@ namespace EmployeeApp.Controllers
         {
             EmployeeViewModel model = new EmployeeViewModel();
             var user = await userManager.GetUserAsync(User);
-            if (user.DepartmentID == 2)
+            if (user.DepartmentID == 3)
             {
                 model.Departments = departmentRepository.GettAll();
                 return View(model);
