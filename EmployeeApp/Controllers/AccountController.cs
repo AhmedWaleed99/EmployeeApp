@@ -64,7 +64,7 @@ namespace EmployeeApp.Controllers
                     //{
                     //    await userManager.AddToRoleAsync(user, "User");
                     //}
-                    await userManager.AddToRoleAsync(user, "HR");
+                    //await userManager.AddToRoleAsync(user, "HR");
                     await signInManager.SignInAsync(user, isPersistent: true);
                     return RedirectToAction("Index", "Employee");
 
