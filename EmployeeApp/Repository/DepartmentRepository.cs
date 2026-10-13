@@ -39,9 +39,6 @@ namespace EmployeeApp.Repository
             context.Update(department);
         }
 
-        Department IDepartmentRepository.GetByID(int id)
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }
