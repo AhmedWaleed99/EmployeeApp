@@ -69,6 +69,14 @@
                 </div>
                 <span asp-validation-for="ConfirmPassword" class="field-error"></span>
             </div>
+            <div class="col-md-6 form-field">
+                <label asp-for="DepartmentID" class="form-label"></label>
+                <select asp-for="DepartmentID" class="form-select"
+                        asp-items="@(new SelectList(Model.Departments, "ID", "Name", Model.DepartmentID))">
+                    <option value="">Select department</option>
+                </select>
+                <span asp-validation-for="DepartmentID" class="field-error"></span>
+            </div>
 
 
 
