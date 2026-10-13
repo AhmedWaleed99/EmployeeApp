@@ -25,9 +25,9 @@ namespace EmployeeApp.Controllers
         [AllowAnonymous]
         public IActionResult Register()
         {
-            RegisterViewModel model = new RegisterViewModel();
-            model.Dept_List = departmentRepository.GettAll();
-            return View(model);
+            
+          
+            return View();
         }
         [HttpPost]
         [AllowAnonymous]
@@ -42,28 +42,29 @@ namespace EmployeeApp.Controllers
                 user.UserName = model.UserName;
                 user.Email = model.Email;
                 user.PasswordHash = model.Password;
-                user.DepartmentID = model.DepartmentID;
+                
 
                 //Check 
                 IdentityResult result = await userManager.CreateAsync(user,model.Password);
                 if (result.Succeeded)
                 {
-                    if (model.DepartmentID == 2)
-                    {
-                        await userManager.AddToRoleAsync(user, "HR");
-                    }
-                    else if (model.DepartmentID == 3)
-                    {
-                        await userManager.AddToRoleAsync(user, "Sales");
-                    }
-                    else if (model.DepartmentID == 1)
-                    {
-                        await userManager.AddToRoleAsync(user, "IT");
-                    }
-                    else
-                    {
-                        await userManager.AddToRoleAsync(user, "User");
-                    }
+                    //if (model.DepartmentID == 2)
+                    //{
+                    //    await userManager.AddToRoleAsync(user, "HR");
+                    //}
+                    //else if (model.DepartmentID == 3)
+                    //{
+                    //    await userManager.AddToRoleAsync(user, "Sales");
+                    //}
+                    //else if (model.DepartmentID == 1)
+                    //{
+                    //    await userManager.AddToRoleAsync(user, "IT");
+                    //}
+                    //else
+                    //{
+                    //    await userManager.AddToRoleAsync(user, "User");
+                    //}
+                    await userManager.AddToRoleAsync(user, "HR");
                     await signInManager.SignInAsync(user, isPersistent: true);
                     return RedirectToAction("Index", "Employee");
 
@@ -77,7 +78,7 @@ namespace EmployeeApp.Controllers
             }
           
 
-            model.Dept_List = departmentRepository.GettAll();
+           
             return View(model);
         }
         [HttpGet]

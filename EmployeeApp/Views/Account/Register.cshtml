@@ -3,7 +3,7 @@
 @{
     Layout = "_AuthLayout";
     ViewData["Title"] = "Create Account";
-    var depts = new SelectList(Model.Dept_List ?? new List<Department>(), "ID", "Name", Model.DepartmentID);
+  
 }
 
 <div class="auth-card">
@@ -70,14 +70,7 @@
                 <span asp-validation-for="ConfirmPassword" class="field-error"></span>
             </div>
 
-            <div class="col-12 form-field">
-                <label asp-for="DepartmentID" class="form-label"></label>
-                <select asp-for="DepartmentID" class="form-select" asp-items="depts">
-                    <option value="">Select department</option>
-                </select>
-                <span asp-validation-for="DepartmentID" class="field-error"></span>
-            </div>
-        </div>
+
 
         <button type="submit" class="form-btn form-btn-primary form-btn--block mt-2">Create Account</button>
     </form>

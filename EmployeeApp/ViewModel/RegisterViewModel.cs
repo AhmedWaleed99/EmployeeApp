@@ -34,11 +34,6 @@ namespace EmployeeApp.ViewModel
         [DataType(DataType.Password)]
         [Compare("Password")]
         public string ConfirmPassword { get; set; }
-      
-        [DisplayName("Department ID")]
 
-        public int? DepartmentID { get; set; }
-
-        public List<Department>? Dept_List { get; set; }
     }
 }
