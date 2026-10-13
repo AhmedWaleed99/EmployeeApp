@@ -52,11 +52,11 @@ namespace EmployeeApp.Controllers
                 IdentityResult result = await userManager.CreateAsync(user,model.Password);
                 if (result.Succeeded)
                 {
-                    if (model.DepartmentID == 2)
+                    if (model.DepartmentID == 3)
                     {
                         await userManager.AddToRoleAsync(user, "HR");
                     }
-                    else if (model.DepartmentID == 3)
+                    else if (model.DepartmentID == 2)
                     {
                         await userManager.AddToRoleAsync(user, "Sales");
                     }
