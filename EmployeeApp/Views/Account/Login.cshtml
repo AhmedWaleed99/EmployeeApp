@@ -1,0 +1,61 @@
+﻿@model LoginViewModel
+
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-card auth-card--sm">
+    <div class="auth-card__head">
+        <h2>Welcome Back</h2>
+        <p>Please login to your account</p>
+    </div>
+
+    <div asp-validation-summary="ModelOnly" class="form-alert"></div>
+
+    <form asp-action="Login" asp-controller="Account" novalidate>
+        <div class="form-field">
+            <label asp-for="UserName" class="form-label"></label>
+            <div class="input-icon">
+                <i class="bi bi-person"></i>
+                <input asp-for="UserName" class="form-control" placeholder="Enter your username" autocomplete="username" autofocus />
+            </div>
+            <span asp-validation-for="UserName" class="field-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="Password" class="form-label"></label>
+            <div class="input-icon">
+                <i class="bi bi-lock"></i>
+                <input asp-for="Password" class="form-control" placeholder="Enter your password" autocomplete="current-password" />
+                <button type="button" class="input-icon__toggle" data-toggle-password aria-label="Show password">
+                    <i class="bi bi-eye"></i>
+                </button>
+            </div>
+            <span asp-validation-for="Password" class="field-error"></span>
+        </div>
+
+        <button type="submit" class="form-btn form-btn-primary form-btn--block mt-2">Login</button>
+    </form>
+
+    <p class="auth-switch">
+        Don't have an account?
+        <a asp-action="Register" asp-controller="Account">Create one</a>
+    </p>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = btn.parentElement.querySelector('input');
+                var show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                btn.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+                btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            });
+        });
+    </script>
+}

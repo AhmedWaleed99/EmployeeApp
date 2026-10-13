@@ -1,0 +1,75 @@
+﻿@model EmployeeViewModel
+
+@{
+    ViewData["Title"] = "Employees";
+    ViewData["ActivePage"] = "Employees";
+  
+}
+
+<div class="page-head">
+    <h1>Add New Employee</h1>
+    <p>Enter the employee's details and assign a department</p>
+</div>
+
+<div class="card-box card-box--form">
+    <div asp-validation-summary="All" class="form-alert"></div>
+
+    <form asp-action="Add" asp-controller="Employee" novalidate>
+
+        <div class="row g-3">
+            <div class="col-md-6 form-field">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Enter full name" />
+                <span asp-validation-for="Name" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="Phone" class="form-label"></label>
+                <input asp-for="Phone" class="form-control" placeholder="Enter phone number" />
+                <span asp-validation-for="Phone" class="field-error"></span>
+            </div>
+
+            <div class="col-md-12 form-field">
+                <label asp-for="Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" placeholder="Enter address" />
+                <span asp-validation-for="Address" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="DepartmentID" class="form-label"></label>
+                <select asp-for="DepartmentID" class="form-select"
+                        asp-items="@(new SelectList(Model.Departments, "ID", "Name", Model.DepartmentID))">
+                    <option value="">Select department</option>
+                </select>
+                <span asp-validation-for="DepartmentID" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="Salary" class="form-label"></label>
+                <input asp-for="Salary" class="form-control" placeholder="Enter salary" />
+                <span asp-validation-for="Salary" class="field-error"></span>
+            </div>
+
+            <div class="col-md-12 form-field">
+                <label asp-for="Status" class="form-label"></label>
+                <div class="switch-row">
+                    <div class="form-check form-switch m-0">
+                        <input asp-for="Status" class="form-check-input" role="switch" />
+                    </div>
+                    <span class="switch-row__text">Employee is active</span>
+                </div>
+                <span asp-validation-for="Status" class="field-error"></span>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" asp-controller="Employee" class="form-btn form-btn-ghost">Cancel</a>
+            <button type="submit" name="Add" class="form-btn form-btn-primary">Save Employee</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

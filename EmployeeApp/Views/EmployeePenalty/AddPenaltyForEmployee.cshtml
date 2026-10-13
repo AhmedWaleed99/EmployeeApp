@@ -1,0 +1,93 @@
+﻿@model EmployeePenaltyViewModel
+@{
+    ViewData["Title"] = "Employee Penalty";
+    ViewData["ActivePage"] = "Employees";
+
+}
+
+<div class="page-head">
+    <h1>Add Penalty To Employee</h1>
+</div>
+
+<div class="card-box card-box--form">
+    <div asp-validation-summary="All" class="form-alert"></div>
+
+    <form asp-action="AddPenaltyForEmployee" asp-controller="EmployeePenalty" novalidate>
+        <div class="col-md-6 form-field">
+            <label asp-for="EmployeeID" class="form-label"></label>
+            <select asp-for="EmployeeID" class="form-select"
+                    asp-items="@(new SelectList(Model.EmployeeList, "ID", "Name", Model.EmployeeID))">
+              
+            </select>
+            <span asp-validation-for="EmployeeID" class="field-error"></span>
+        </div>
+        <div class="col-md-6 form-field">
+            <label asp-for="PenaltyTypeID" class="form-label"></label>
+            <select asp-for="PenaltyTypeID" class="form-select" onchange="GetAmount()"
+                    asp-items="@(new SelectList(Model.PenaltyTypeList, "ID", "Name", Model.PenaltyTypeID))">
+                <option value="">Select Penalty Type</option>
+            </select>
+            <span asp-validation-for="PenaltyTypeID" class="field-error"></span>
+        </div>
+
+        <div class="row g-3" >
+            <div class="col-md-6 form-field" hidden>
+                <label asp-for="ManagerID" class="form-label"></label>
+                <input asp-for="ManagerID" class="form-control"  />
+                <span asp-validation-for="ManagerID" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="Amount" class="form-label"></label>
+                <input asp-for="Amount" class="form-control" placeholder="Enter Amount" />
+                <span asp-validation-for="Amount" class="field-error"></span>
+            </div>
+
+            <div class="col-md-12 form-field">
+                <label asp-for="Date" class="form-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="Notes" class="form-label"></label>
+                <input asp-for="Notes" class="form-control" placeholder="Enter Notes" />
+                <span asp-validation-for="Notes" class="field-error"></span>
+            </div>
+
+
+        <div class="form-actions">
+            <a asp-action="Index" asp-controller="Employee" class="form-btn form-btn-ghost">Cancel</a>
+            <button type="submit" name="Add" class="form-btn form-btn-primary">Add Penalty</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    function GetAmount(){
+     var PenaltyTypeID =   document.getElementById("PenaltyTypeID").value;
+     var Amount  = document.getElementById("Amount");
+     
+        console.log(PenaltyTypeID);
+
+        $.ajax({
+            url :"/EmployeePenalty/GetPenalty?penID=" + PenaltyTypeID, success : function (result){
+                // $("#div1").html(result);
+                console.log(result);
+               // Amount.value = result.defaultAmount;
+                
+                 for(let p of result){
+                           Amount.value = p.defaultAmount;
+                }
+                      
+            }
+        });
+    }
+</script>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

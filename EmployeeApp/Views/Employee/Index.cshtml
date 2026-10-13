@@ -1,0 +1,119 @@
+﻿@model List<Employee>
+
+@{
+    ViewData["Title"] = "Employees";
+    ViewData["ActivePage"] = "Employees";
+}
+
+<div class="page-head page-head--row">
+    <div>
+        <h1>Employees</h1>
+        <p>Manage your team members</p>
+    </div>
+    <a asp-action="Add" asp-controller="Employee" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Employee
+    </a>
+    <a asp-action="Add" asp-controller="EmployeePenalty" class="btn btn-primary">
+        <i class="bi bi-plus-lg me-1"></i> Add Employee Penalty
+    </a>
+</div>
+
+<div class="card-box card-box--flush">
+    @if (!Model.Any())
+    {
+        <div class="empty-state">
+            <i class="bi bi-people"></i>
+            <h2>No employees yet</h2>
+            <p>Add your first employee to get started.</p>
+            <a asp-action="Add" asp-controller="Employee" class="btn btn-primary">Add Employee</a>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Salary</th>
+                        <th>Status</th>
+                   
+                             <th class="text-end">Actions</th>
+                      
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        var parts = (item.Name ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                        var initials = parts.Length == 0 ? "?" : string.Concat(parts.Take(2).Select(p => char.ToUpper(p[0])));
+                        var status = Convert.ToString(item.Status);
+                        var isActive = status == "Active" || status == "True";
+                        <tr>
+                            <td>
+                                <a asp-action="Details" asp-controller="Employee" asp-route-id="@item.ID">
+                                <div class="app-user">
+                                    <span class="app-avatar">@item.ID</span>
+
+                                </div>
+                                </a>
+                            </td>
+                            <td>
+                                <div class="cell-user">
+                                    <span class="app-avatar">@initials</span>
+                                    <span class="fw-semibold">@item.Name</span>
+                                </div>
+                            </td>
+                            
+                            <td>@item.Department?.Name</td>
+                            <td>@item.Phone</td>
+                            <td>@item.Address</td>
+                            <td>@string.Format("{0:N0}", item.Salary)</td>
+                            <td>
+                                <span class="badge-status @(isActive ? "" : "badge-status--off")">
+                                    @(status == "True" ? "Active" : status == "False" ? "Inactive" : status)
+                                </span>
+                            </td>
+                            @if (User.IsInRole("HR"))
+                            {
+                                 <td class="text-end text-nowrap">
+                                
+                                <a asp-action="AddPenaltyForEmployee"  asp-controller="EmployeePenalty" asp-route-id="@item.ID"
+                                   class="icon-action icon-action--add" title="AddPenaltyForEmployee" aria-label="Edit @item.Name">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Edit" asp-controller="Employee" asp-route-id="@item.ID"
+                                   class="icon-action icon-action--edit" title="Edit" aria-label="Edit @item.Name">
+                                    <i class="bi bi-pencil-square"></i>
+                                </a>
+                                <a asp-action="Delete" asp-controller="Employee" asp-route-id="@item.ID"
+                                   class="icon-action icon-action--delete" title="Delete" aria-label="Delete @item.Name"
+                                   onclick="return confirm('Delete this employee?');">
+                                    <i class="bi bi-trash3"></i>
+                                </a>
+                            </td>
+                            }
+                            else
+                            {
+                                <td class="text-end text-nowrap">
+                                      <a asp-action="AddPenaltyForEmployee" asp-controller="EmployeePenalty" asp-route-id="@item.ID"
+                                   class="icon-action icon-action--add" title="AddPenaltyForEmployee" aria-label="Edit @item.Name">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                  </td>
+                            }
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="table-foot">Showing 1 to @Model.Count of @Model.Count</div>
+    }
+</div>

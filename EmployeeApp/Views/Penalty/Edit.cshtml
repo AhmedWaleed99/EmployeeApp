@@ -1,0 +1,51 @@
+﻿@model PenaltyTypeViewModel
+
+@{
+    ViewData["Title"] = "Edit Penalty";
+    ViewData["ActivePage"] = "Penalty";
+}
+
+<div class="page-head">
+    <h1>Edit Penalty</h1>
+
+</div>
+
+<div class="card-box card-box--form">
+    <div asp-validation-summary="All" class="form-alert"></div>
+
+    <form asp-action="Edit" asp-controller="Penalty" novalidate>
+
+        <div class="form-field">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter Penalty name" />
+            <span asp-validation-for="Name" class="field-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="DefaultAmount" class="form-label"></label>
+            <input asp-for="DefaultAmount" class="form-control" />
+            <span asp-validation-for="DefaultAmount" class="field-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="IsActive" class="form-label"></label>
+            <div class="switch-row">
+                <div class="form-check form-switch m-0">
+                    <input asp-for="IsActive" class="form-check-input" role="switch" />
+                </div>
+                <span class="switch-row__text">Penalty is active</span>
+            </div>
+            <span asp-validation-for="IsActive" class="field-error"></span>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" asp-controller="Penalty" class="form-btn form-btn-ghost">Cancel</a>
+            <button type="submit" name="Save" class="form-btn form-btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

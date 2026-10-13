@@ -1,0 +1,51 @@
+﻿@model DepartmentViewModel
+
+@{
+    ViewData["Title"] = "Add Department";
+    ViewData["ActivePage"] = "Departments";
+}
+
+<div class="page-head">
+    <h1>Add New Department</h1>
+    <p>Create a new department and assign its manager</p>
+</div>
+
+<div class="card-box card-box--form">
+    <div asp-validation-summary="ModelOnly" class="form-alert"></div>
+
+    <form asp-action="Add" asp-controller="Department" novalidate>
+
+        <div class="form-field">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter department name" />
+            <span asp-validation-for="Name" class="field-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="ManagerName" class="form-label"></label>
+            <input asp-for="ManagerName" class="form-control" placeholder="Enter manager name" />
+            <span asp-validation-for="ManagerName" class="field-error"></span>
+        </div>
+
+        <div class="form-field">
+            <label asp-for="Status" class="form-label"></label>
+            <div class="switch-row">
+                <div class="form-check form-switch m-0">
+                    <input asp-for="Status" class="form-check-input" role="switch" />
+                </div>
+                <span class="switch-row__text">Department is active</span>
+            </div>
+            <span asp-validation-for="Status" class="field-error"></span>
+        </div>
+
+        <div class="form-actions">
+            <a asp-action="Index" asp-controller="Department" class="form-btn form-btn-ghost">Cancel</a>
+            <button type="submit" name="Create" class="form-btn form-btn-primary">Save Department</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+}

@@ -1,0 +1,105 @@
+﻿@model RegisterViewModel
+
+@{
+    Layout = "_AuthLayout";
+    ViewData["Title"] = "Create Account";
+    var depts = new SelectList(Model.Dept_List ?? new List<Department>(), "ID", "Name", Model.DepartmentID);
+}
+
+<div class="auth-card">
+    <div class="auth-card__head">
+        <h2>Create Account</h2>
+        <p>Fill in your details to get started</p>
+    </div>
+
+    <div asp-validation-summary="All" class="form-alert"></div>
+
+    <form asp-action="Register" asp-controller="Account" novalidate>
+        <div class="row g-3">
+            <div class="col-md-6 form-field">
+                <label asp-for="FirstName" class="form-label"></label>
+                <input asp-for="FirstName" class="form-control" placeholder="First name" autocomplete="given-name" />
+                <span asp-validation-for="FirstName" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="LastName" class="form-label"></label>
+                <input asp-for="LastName" class="form-control" placeholder="Last name" autocomplete="family-name" />
+                <span asp-validation-for="LastName" class="field-error"></span>
+            </div>
+
+            <div class="col-12 form-field">
+                <label asp-for="UserName" class="form-label"></label>
+                <div class="input-icon">
+                    <i class="bi bi-person"></i>
+                    <input asp-for="UserName" class="form-control" placeholder="Choose a username" autocomplete="username" />
+                </div>
+                <span asp-validation-for="UserName" class="field-error"></span>
+            </div>
+
+            <div class="col-12 form-field">
+                <label asp-for="Email" class="form-label"></label>
+                <div class="input-icon">
+                    <i class="bi bi-envelope"></i>
+                    <input asp-for="Email" class="form-control" placeholder="Enter your email" autocomplete="email" />
+                </div>
+                <span asp-validation-for="Email" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="Password" class="form-label"></label>
+                <div class="input-icon">
+                    <i class="bi bi-lock"></i>
+                    <input asp-for="Password" class="form-control" placeholder="Enter password" autocomplete="new-password" />
+                    <button type="button" class="input-icon__toggle" data-toggle-password aria-label="Show password">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="field-error"></span>
+            </div>
+
+            <div class="col-md-6 form-field">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <div class="input-icon">
+                    <i class="bi bi-shield-lock"></i>
+                    <input asp-for="ConfirmPassword" class="form-control" placeholder="Repeat password" autocomplete="new-password" />
+                    <button type="button" class="input-icon__toggle" data-toggle-password aria-label="Show password">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="field-error"></span>
+            </div>
+
+            <div class="col-12 form-field">
+                <label asp-for="DepartmentID" class="form-label"></label>
+                <select asp-for="DepartmentID" class="form-select" asp-items="depts">
+                    <option value="">Select department</option>
+                </select>
+                <span asp-validation-for="DepartmentID" class="field-error"></span>
+            </div>
+        </div>
+
+        <button type="submit" class="form-btn form-btn-primary form-btn--block mt-2">Create Account</button>
+    </form>
+
+    <p class="auth-switch">
+        Already have an account?
+        <a asp-action="Login" asp-controller="Account">Sign in</a>
+    </p>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        document.querySelectorAll('[data-toggle-password]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var input = btn.parentElement.querySelector('input');
+                var show = input.type === 'password';
+                input.type = show ? 'text' : 'password';
+                btn.querySelector('i').className = show ? 'bi bi-eye-slash' : 'bi bi-eye';
+                btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            });
+        });
+    </script>
+}

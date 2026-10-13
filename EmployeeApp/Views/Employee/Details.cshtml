@@ -1,0 +1,115 @@
+﻿@model Employee
+
+@{
+    ViewData["Title"] = "Employee Details";
+    ViewData["ActivePage"] = "Employees";
+
+    var parts = (Model.Name ?? "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
+    var initials = parts.Length == 0 ? "?" : string.Concat(parts.Take(2).Select(p => char.ToUpper(p[0])));
+    var status = Convert.ToString(Model.Status);
+    var isActive = status == "Active" || status == "True";
+
+    var penalties = Model.EmployeesPenalties?.ToList();
+    var hasPenalties = penalties != null && penalties.Any();
+    var totalPenalties = hasPenalties ? penalties.Sum(p => p.Amount) : 0;
+}
+
+<div class="page-head">
+    <h1>Employee Details</h1>
+    <a asp-action="Index" asp-controller="Employee" class="back-link">
+        <i class="bi bi-arrow-left"></i> Back to Employees
+    </a>
+</div>
+
+<div class="row g-3 mb-3">
+    <!-- Profile -->
+    <div class="col-lg-8">
+        <div class="card-box">
+            <div class="profile-head">
+                <span class="app-avatar app-avatar--lg">@initials</span>
+                <div>
+                    <h2 class="profile-head__name">@Model.Name</h2>
+                    <div class="profile-head__meta">
+                        <span class="text-muted">#@Model.ID</span>
+                        <span class="badge-status @(isActive ? "" : "badge-status--off")">
+                            @(status == "True" ? "Active" : status == "False" ? "Inactive" : status)
+                        </span>
+                    </div>
+                </div>
+                <a asp-action="Edit" asp-controller="Employee" asp-route-id="@Model.ID"
+                   class="btn btn-primary ms-auto">
+                    <i class="bi bi-pencil-square me-1"></i> Edit
+                </a>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <i class="bi bi-building"></i>
+                    <div><small>Department</small><span>@(Model.Department?.Name ?? "-")</span></div>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-telephone"></i>
+                    <div><small>Phone</small><span>@Model.Phone</span></div>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <div><small>Address</small><span>@Model.Address</span></div>
+                </div>
+                <div class="info-item">
+                    <i class="bi bi-cash-stack"></i>
+                    <div><small>Salary</small><span>@string.Format("{0:N2}", Model.Salary)</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Salary summary -->
+    <div class="col-lg-4">
+        <div class="card-box">
+            <h2 class="card-box__title">Salary Summary</h2>
+            <ul class="summary-list">
+                <li><span>Base salary</span><strong>@string.Format("{0:N2}", Model.Salary)</strong></li>
+                <li><span>Total penalties</span><strong class="text-danger">- @string.Format("{0:N2}", totalPenalties)</strong></li>
+                <li class="summary-list__total"><span>Net salary</span><strong>@string.Format("{0:N2}", Model.Salary - totalPenalties)</strong></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Penalties -->
+<h2 class="section-title">Penalties</h2>
+<div class="card-box card-box--flush">
+    @if (!hasPenalties)
+    {
+        <div class="empty-state">
+            <i class="bi bi-check-circle"></i>
+            <h2>No penalties</h2>
+            <p>This employee has no penalties on record.</p>
+        </div>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Penalty Type</th>
+                        <th class="text-end">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in penalties)
+                    {
+                        <tr>
+                            <td class="text-muted">@item.ID</td>
+                            <td class="fw-semibold">@item.PenaltyType?.Name</td>
+                            <td class="text-end text-danger">@string.Format("{0:N2}", item.Amount)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="table-foot">@penalties.Count penalt@(penalties.Count == 1 ? "y" : "ies")</div>
+    }
+</div>
