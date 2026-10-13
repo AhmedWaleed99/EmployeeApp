@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EmployeeApp.Controllers
 {
-    //[Authorize(Roles = "Admin,HR")]
+    [Authorize(Roles = "Admin,HR")]
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository departmentRepository;
