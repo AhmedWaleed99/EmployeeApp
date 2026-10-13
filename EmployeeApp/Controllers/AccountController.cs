@@ -86,34 +86,65 @@ namespace EmployeeApp.Controllers
             return View();
 
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid == true)
+            if (!ModelState.IsValid)
             {
-                //Check Found 
-                ApplicationUser user = await userManager.FindByNameAsync(model.UserName);
-
-                if (user != null)
-                {
-                    //Check Password
-                    bool checkPassword = await userManager.CheckPasswordAsync(user, model.Password);
-                    if (checkPassword == true)
-                    {
-                        //Save Cookies
-                        await signInManager.SignInAsync(user, isPersistent: true);
-
-                        return RedirectToAction("Index", "Home");
-                    }
-                }
-                ModelState.AddModelError("", "UserName Or Password Wrong !");
+                return View(model);
             }
-            return View(model);
 
+            var result = await signInManager.PasswordSignInAsync(
+                model.UserName,
+                model.Password,
+                isPersistent: true,
+                lockoutOnFailure: false
+            );
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            ModelState.AddModelError(
+                "",
+                "UserName Or Password Wrong !"
+            );
+
+            return View(model);
         }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[AllowAnonymous]
+
+        //public async Task<IActionResult> Login(LoginViewModel model)
+        //{
+        //    if (ModelState.IsValid == true)
+        //    {
+        //        //Check Found 
+        //        ApplicationUser user = await userManager.FindByNameAsync(model.UserName);
+
+        //        if (user != null)
+        //        {
+        //            //Check Password
+        //            bool checkPassword = await userManager.CheckPasswordAsync(user, model.Password);
+        //            if (checkPassword == true)
+        //            {
+        //                //Save Cookies
+        //                await signInManager.SignInAsync(user, isPersistent: true);
+
+        //                return RedirectToAction("Index", "Home");
+        //            }
+        //        }
+        //        ModelState.AddModelError("", "UserName Or Password Wrong !");
+        //    }
+        //    return View(model);
+
+        //}
         [AllowAnonymous]
         public async Task<IActionResult> SignOut()
         {
